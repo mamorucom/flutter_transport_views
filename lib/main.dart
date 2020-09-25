@@ -9,7 +9,20 @@ void main() {
   );
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  String _result;
+
+  @override
+  void initState() {
+    super.initState();
+    _result = "遷移先に移動";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +34,7 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '遷移先に移動',
+              _result,
               style: Theme.of(context).textTheme.headline5,
             ),
             RaisedButton(
@@ -31,13 +44,28 @@ class MyHomePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        EditPage(receive: 'Hello from HomePage!'),
+                        // 引数に遷移元から遷移先へ渡す値を設定
+                        EditPage(receive: 'Hello! from HomePage.'),
                   ),
                 );
                 print(result);
+                setState(() {
+                  _result = result;
+                });
               },
             ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            _result = "遷移先に移動";
+          });
+        },
+        tooltip: 'Increment',
+        child: Icon(
+          Icons.refresh,
         ),
       ),
     );
@@ -52,7 +80,8 @@ class EditPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Navigator.pop(context, 'Thank you from 戻るアイコン');
+        // 第2引数に渡す値を設定
+        Navigator.pop(context, 'Thank you! from 戻るアイコン');
         return Future.value(false);
       },
       child: Scaffold(
@@ -70,7 +99,7 @@ class EditPage extends StatelessWidget {
               RaisedButton(
                 child: Text('Return'),
                 onPressed: () =>
-                    Navigator.of(context).pop('Thank you from 戻るボタン'),
+                    Navigator.of(context).pop('Thank you! from 戻るボタン'),
               ),
             ],
           ),
