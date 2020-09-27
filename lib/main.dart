@@ -219,8 +219,6 @@ class EditPage extends StatelessWidget {
       builder: (context, model, child) {
         return WillPopScope(
           onWillPop: () {
-            // model.updateText('Thank you! from 戻るアイコン'); // ←ここで実行しては遷移元は更新されなかった
-
             // 第2引数に渡す値を設定
             Navigator.pop(context, 'Thank you! from 戻るアイコン');
             return Future.value(false);
