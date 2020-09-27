@@ -156,7 +156,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // テキスト表示
     Widget _renderText(ResultProvider model) {
-      print('text:${model._result}');
+      // print('text:${model._result}');
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +176,7 @@ class MyHomePage extends StatelessWidget {
                         EditPage(receive: 'Hello! from HomePage.'),
                   ),
                 );
-                print(result);
+                // print(result);
                 model.updateText(result);
               },
             ),
@@ -185,23 +185,26 @@ class MyHomePage extends StatelessWidget {
       );
     }
 
-    return Consumer<ResultProvider>(
-      builder: (context, model, _) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('My Home Page（遷移元）'),
+    return Consumer<ResultProvider>(builder: (context, model, _) {
+      return Scaffold(
+        appBar: appBar(),
+        body: _renderText(model),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            model.refresh();
+          },
+          child: Icon(
+            Icons.refresh,
           ),
-          body: _renderText(model),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              model.refresh();
-            },
-            child: Icon(
-              Icons.refresh,
-            ),
-          ),
-        );
-      },
+        ),
+      );
+    });
+  }
+
+  appBar() {
+    print('appBar実行');
+    return AppBar(
+      title: Text('My Home Page（遷移元）'),
     );
   }
 }
