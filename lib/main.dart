@@ -142,12 +142,15 @@ class ResultProvider extends ChangeNotifier {
 
   void refresh() {
     initValue();
-    notifyListeners();
+    notifyListeners(); // Providerを介してConsumer配下のWidgetがリビルドされる
   }
 
   void updateText(String str) {
     _result = str;
-    notifyListeners();
+  }
+
+  void notify() {
+    notifyListeners(); // Providerを介してConsumer配下のWidgetがリビルドされる
   }
 }
 
@@ -163,22 +166,23 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              model._result,
+              model._result, // ResultProviderのプロパティ
               style: Theme.of(context).textTheme.headline5,
             ),
             RaisedButton(
               child: Text('Go to Edit Page'),
               onPressed: () async {
-                var result = await Navigator.push(
+                model.updateText('Hello! from HomePage.');
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         // 引数に遷移元から遷移先へ渡す値を設定
-                        EditPage(receive: 'Hello! from HomePage.'),
+                        EditPage(),
                   ),
                 );
                 // print(result);
-                model.updateText(result);
+                model.notify(); // ResultProviderのメソッド
               },
             ),
           ],
@@ -212,7 +216,7 @@ class MyHomePage extends StatelessWidget {
           Consumer<ResultProvider>(builder: (context, model, _) {
         return FloatingActionButton(
           onPressed: () {
-            model.refresh();
+            model.refresh(); // ResultProviderのメソッド
           },
           child: Icon(
             Icons.refresh,
@@ -241,8 +245,8 @@ class EditPage extends StatelessWidget {
       builder: (context, model, child) {
         return WillPopScope(
           onWillPop: () {
-            // 第2引数に渡す値を設定
-            Navigator.pop(context, 'Thank you! from 戻るアイコン');
+            model.updateText('Thank you! from 戻るアイコン'); // ResultProviderのメソッド
+            Navigator.pop(context);
             return Future.value(false);
           },
           child: Scaffold(
@@ -254,14 +258,16 @@ class EditPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    receive,
+                    model._result,
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   RaisedButton(
-                    child: Text('Return'),
-                    onPressed: () =>
-                        Navigator.of(context).pop('Thank you! from 戻るボタン'),
-                  ),
+                      child: Text('Return'),
+                      onPressed: () {
+                        model.updateText(
+                            'Thank you! from 戻るボタン'); // ResultProviderのメソッド
+                        Navigator.pop(context);
+                      }),
                 ],
               ),
             ),
