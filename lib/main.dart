@@ -151,6 +151,7 @@ class ResultProvider extends ChangeNotifier {
   }
 }
 
+// 遷移元ページ
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -185,20 +186,40 @@ class MyHomePage extends StatelessWidget {
       );
     }
 
-    return Consumer<ResultProvider>(builder: (context, model, _) {
-      return Scaffold(
-        appBar: appBar(),
-        body: _renderText(model),
-        floatingActionButton: FloatingActionButton(
+    // サンプル１：Scaffold全体をリビルド
+    // return Consumer<ResultProvider>(builder: (context, model, _) {
+    //   return Scaffold(
+    //     appBar: appBar(),
+    //     body: _renderText(model),
+    //     floatingActionButton: FloatingActionButton(
+    //       onPressed: () {
+    //         model.refresh();
+    //       },
+    //       child: Icon(
+    //         Icons.refresh,
+    //       ),
+    //     ),
+    //   );
+    // });
+
+    // サンプル２：appBar以外をリビルド
+    return Scaffold(
+      appBar: appBar(),
+      body: Consumer<ResultProvider>(builder: (context, model, _) {
+        return _renderText(model);
+      }),
+      floatingActionButton:
+          Consumer<ResultProvider>(builder: (context, model, _) {
+        return FloatingActionButton(
           onPressed: () {
             model.refresh();
           },
           child: Icon(
             Icons.refresh,
           ),
-        ),
-      );
-    });
+        );
+      }),
+    );
   }
 
   appBar() {
@@ -209,6 +230,7 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+// 遷移先ページ
 class EditPage extends StatelessWidget {
   final receive;
   const EditPage({Key key, this.receive}) : super(key: key);
