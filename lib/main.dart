@@ -110,7 +110,6 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -169,7 +168,7 @@ class MyHomePage extends StatelessWidget {
               model._result, // ResultProviderのプロパティ
               style: Theme.of(context).textTheme.headline5,
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Go to Edit Page'),
               onPressed: () async {
                 model.updateText('Hello! from HomePage.');
@@ -261,7 +260,7 @@ class EditPage extends StatelessWidget {
                     model._result,
                     style: Theme.of(context).textTheme.headline5,
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                       child: Text('Return'),
                       onPressed: () {
                         model.updateText(
