@@ -312,7 +312,8 @@ final resultProvider =
 });
 
 class ResultProvider extends ChangeNotifier {
-  String _result = '遷移先に移動';
+  String _result = defaultResultValue;
+  static const defaultResultValue = '遷移先に移動';
 
   ResultProvider();
 
@@ -341,7 +342,23 @@ final resultStateProvider =
 });
 
 class ResultNotifier extends StateNotifier<String> {
-  ResultNotifier() : super('遷移先に移動');
+  ResultNotifier() : super(defaultResultValue);
+
+  static const defaultResultValue = '遷移先に移動';
+
+  void initValue() {
+    // state更新時にProviderを介してConsumer配下のWidgetがリビルドされる
+    state = defaultResultValue;
+  }
+
+  void updateText(String str) {
+    // state更新時にProviderを介してConsumer配下のWidgetがリビルドされる
+    state = str;
+  }
+
+  void refresh() {
+    initValue();
+  }
 }
 
 // 遷移元ページ
