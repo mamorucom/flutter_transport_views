@@ -306,7 +306,8 @@ void main() {
   );
 }
 
-final resultProvider = ChangeNotifierProvider<ResultProvider>((ref) {
+final resultProvider =
+    ChangeNotifierProvider.autoDispose<ResultProvider>((ref) {
   return ResultProvider();
 });
 
@@ -332,6 +333,15 @@ class ResultProvider extends ChangeNotifier {
   void notify() {
     notifyListeners(); // Providerを介してConsumer配下のWidgetがリビルドされる
   }
+}
+
+final resultStateProvider =
+    StateNotifierProvider.autoDispose<ResultNotifier, String>((ref) {
+  return ResultNotifier();
+});
+
+class ResultNotifier extends StateNotifier<String> {
+  ResultNotifier() : super('遷移先に移動');
 }
 
 // 遷移元ページ
